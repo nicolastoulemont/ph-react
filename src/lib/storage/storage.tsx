@@ -15,7 +15,7 @@ type State = LocalStore
 type Actions =
   | { type: 'SYNC_STORES'; payload: Folder[] }
   | { type: 'ADD_IMAGE'; payload: Folder }
-  | { type: 'MOVE_IMAGE'; payload: { from: number; to: number } }
+  | { type: 'MOVE_IMAGE'; payload: Folder[] }
   | { type: 'CREATE_FOLDER'; payload: Folder }
   | { type: 'RENAME_FOLDER'; payload: { originalName: string; newName: string } }
 
@@ -24,6 +24,7 @@ interface InMemoryContext {
   dispatch: React.Dispatch<Actions>
   addImage: (base64: string) => void
   createFolder: () => void
+  moveItem: (targetName: string, imgInfos: { folderIndex: number; imgIndex: number }) => void
 }
 
 export const InMemoryStoreContext = createContext<InMemoryContext | null>(null)
@@ -43,7 +44,7 @@ function reducer(state: State, action: Actions) {
       return [...state, action.payload]
     }
     case 'MOVE_IMAGE': {
-      return state
+      return action.payload
     }
     case 'CREATE_FOLDER': {
       return [...state, action.payload]
@@ -71,7 +72,10 @@ export function InMemoryStoreProvider({ children }: { children: ReactNode }) {
   }, [])
 
   function addImage(base64: string) {
-    const newFolder: Folder = { name: 'Untitled Folder', images: [{ type: 'base64', data: base64 }] }
+    const newFolder: Folder = {
+      name: state.length === 0 ? 'Untitle Folder' : `Untitle Folder (${state.length})`,
+      images: [{ type: 'base64', data: base64 }],
+    }
     dispatch({ type: 'ADD_IMAGE', payload: newFolder })
     if (value) {
       setValue([...value, newFolder])
@@ -81,7 +85,7 @@ export function InMemoryStoreProvider({ children }: { children: ReactNode }) {
   }
 
   function createFolder() {
-    const newFolder = { name: 'Untitle Folder', images: [] }
+    const newFolder = { name: state.length === 0 ? 'Untitle Folder' : `Untitle Folder (${state.length})`, images: [] }
     dispatch({ type: 'CREATE_FOLDER', payload: newFolder })
     if (value) {
       setValue([...value, newFolder])
@@ -90,8 +94,29 @@ export function InMemoryStoreProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  function moveItem(targetName: string, imgInfos: { folderIndex: number; imgIndex: number }) {
+    const imgFolder = state.find((_, index) => index === imgInfos.folderIndex)
+    if (!imgFolder) return
+    const img = imgFolder.images.find((_, index) => index === imgInfos.imgIndex)
+    if (!img) return
+
+    const newState = state.reduce((acc, folder, index) => {
+      if (targetName === folder.name) {
+        folder.images.push(img)
+        acc.push(folder)
+      } else if (imgInfos.folderIndex === index) {
+        acc.push({ name: folder.name, images: folder.images.filter((_, index) => index !== imgInfos.imgIndex) })
+      }
+
+      return acc
+    }, [] as Folder[])
+
+    dispatch({ type: 'MOVE_IMAGE', payload: newState })
+    setValue(newState)
+  }
+
   return (
-    <InMemoryStoreContext.Provider value={{ state, dispatch, addImage, createFolder }}>
+    <InMemoryStoreContext.Provider value={{ state, dispatch, addImage, createFolder, moveItem }}>
       {children}
     </InMemoryStoreContext.Provider>
   )
