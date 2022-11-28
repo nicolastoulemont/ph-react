@@ -1,16 +1,16 @@
 import './UploadedList.css'
-import { useStore } from '../../../lib'
+import { useInMemoryStore } from '../../../lib'
 
 export function UploadedList() {
-  const [value] = useStore()
-  console.log(value)
+  const { state, createFolder } = useInMemoryStore()
+  console.log(state)
   return (
     <div className='uploaded-list'>
       <h2>List of uploaded images</h2>
-      {value && value?.length > 0 && (
+      {state && state?.length > 0 && (
         <>
-          {value.map((folder) => (
-            <div key={folder.name}>
+          {state.map((folder, index) => (
+            <div key={`${folder.name}-${index}`}>
               <h3>{folder.name}</h3>
               <ul>
                 {folder.images.map((image, index) => (
@@ -23,6 +23,8 @@ export function UploadedList() {
           ))}
         </>
       )}
+
+      <button onClick={createFolder}>Add a new folder</button>
     </div>
   )
 }
