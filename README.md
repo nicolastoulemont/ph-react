@@ -3,3 +3,5 @@
 Start the app using the following command, replacing the key by the one [obtainable here](https://dashboard.photoroom.com/accounts/signup/):
 
     REACT_APP_API_KEY="your_api_key" yarn run start
+
+## Feel free to read the AFTER_README.md file :)

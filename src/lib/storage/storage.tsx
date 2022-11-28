@@ -49,13 +49,15 @@ function reducer(state: State, action: Actions) {
     case 'CREATE_FOLDER': {
       return [...state, action.payload]
     }
-    case 'RENAME_FOLDER': {
-      return state
-    }
     case 'SYNC_STORES': {
       return action.payload
     }
-
+    case 'RENAME_FOLDER': {
+      /**
+       * TODO: To implement
+       */
+      return state
+    }
     default:
       throw new Error('Action not implemented')
   }
