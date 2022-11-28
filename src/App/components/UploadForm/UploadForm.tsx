@@ -54,11 +54,9 @@ export function UploadForm() {
   }
 
   return (
-    <div className='App'>
-      <header className='App-header'>
-        {!result && <AddButton onImageAdd={onImageAdd} />}
-        {result && <img src={result} width={300} alt='result from the API' />}
-      </header>
+    <div className='uploaded-form'>
+      {!result && <AddButton onImageAdd={onImageAdd} />}
+      {result && <img src={result} width={300} alt='result from the API' />}
     </div>
   )
 }
