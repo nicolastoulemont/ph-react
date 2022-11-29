@@ -1,4 +1,3 @@
-import './UploadedList.css'
 import { useInMemoryStore } from '../../../lib'
 
 export function UploadedList() {
