@@ -5,47 +5,52 @@ export function UploadedList() {
   const { state, createFolder, moveItem } = useInMemoryStore()
 
   return (
-    <div className='uploaded-list'>
-      <h2>List of uploaded images</h2>
+    <div className='block p-9 border-r-2 border-gray-100 w-1/4'>
+      <button className=' mb-6 px-3 py-2 bg-blue-500 rounded-lg text-white font-medium text-sm' onClick={createFolder}>
+        New folder
+      </button>
+      <h2 className='text-xl font-semibold'>Uploaded images</h2>
       {state && state?.length > 0 && (
         <>
           {state.map((folder, index) => (
-            <div key={folder.name}>
-              <h3>{folder.name}</h3>
-              <ul style={{ paddingLeft: 0 }}>
-                {folder.images.map((image, imgIndex) => (
-                  <li key={`${folder.name}-${imgIndex}`} style={{ listStyle: 'none' }}>
-                    <div style={{ display: 'block', width: '100%' }}>
-                      <img alt={`uploaded within folder ${folder.name}`} src={image.data} width='150px' height='auto' />
-                      <div style={{ display: 'flex', flexDirection: 'column', marginTop: '1rem' }}>
-                        <label>Move image</label>
-                        <select
-                          onChange={(event) => {
-                            if (event.target.value !== '') {
-                              moveItem(event.target.value, { folderIndex: index, imgIndex })
-                            }
-                          }}
-                        >
-                          <option value=''>--Please choose an option--</option>
-                          {state
-                            .filter((_, idx) => idx !== index)
-                            .map((folder, folderIndex) => (
-                              <option key={`option-${folderIndex}`} value={folder.name}>
-                                {folder.name}
-                              </option>
-                            ))}
-                        </select>
+            <div key={folder.name} className='my-3 border-2 border-gray-200 rounded-md p-3'>
+              <h3 className='text-sm font-medium'>{folder.name}</h3>
+              {folder.images.length === 0 ? (
+                <p className='text-xs italic'>No images</p>
+              ) : (
+                <ul className='pl-0 w-full'>
+                  {folder.images.map((image, imgIndex) => (
+                    <li key={`${folder.name}-${imgIndex}`} className='list-none w-full'>
+                      <div className='block w-full'>
+                        <img alt={`uploaded within folder ${folder.name}`} src={image.data} className='w-full h-auto' />
+                        <div className='flex flex-col mt-2'>
+                          <label>Move image</label>
+                          <select
+                            onChange={(event) => {
+                              if (event.target.value !== '') {
+                                moveItem(event.target.value, { folderIndex: index, imgIndex })
+                              }
+                            }}
+                          >
+                            <option value=''>--Please choose an option--</option>
+                            {state
+                              .filter((_, idx) => idx !== index)
+                              .map((folder, folderIndex) => (
+                                <option key={`option-${folderIndex}`} value={folder.name}>
+                                  {folder.name}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </>
       )}
-
-      <button onClick={createFolder}>Add a new folder</button>
     </div>
   )
 }
