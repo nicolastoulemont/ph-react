@@ -19,7 +19,7 @@ export default function AddButton({
           id='customFileAdd'
           accept='.png, .jpg, .jpeg'
         />
-        <img src={start} alt='' className='w-[120px]' />
+        <img src={start} alt='plus sign' className='w-[120px]' />
       </label>
     </div>
   )
