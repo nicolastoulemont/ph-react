@@ -16,7 +16,7 @@ export function UploadedList() {
                 {folder.images.map((image, imgIndex) => (
                   <li key={`${folder.name}-${imgIndex}`} style={{ listStyle: 'none' }}>
                     <div style={{ display: 'block', width: '100%' }}>
-                      <img alt='uploaded image' src={image.data} width='150px' height='auto' />
+                      <img alt={`uploaded within folder ${folder.name}`} src={image.data} width='150px' height='auto' />
                       <div style={{ display: 'flex', flexDirection: 'column', marginTop: '1rem' }}>
                         <label>Move image</label>
                         <select

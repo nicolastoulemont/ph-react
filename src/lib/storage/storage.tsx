@@ -71,7 +71,7 @@ export function InMemoryStoreProvider({ children }: { children: ReactNode }) {
     if (value) {
       dispatch({ type: 'SYNC_STORES', payload: value })
     }
-  }, [])
+  }, [value])
 
   function addImage(base64: string) {
     const newFolder: Folder = {
