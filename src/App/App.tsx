@@ -4,7 +4,7 @@ import { InMemoryStoreProvider } from '../lib'
 export function App() {
   return (
     <InMemoryStoreProvider>
-      <main className='App'>
+      <main className='flex'>
         <UploadForm />
         <UploadedList />
       </main>
