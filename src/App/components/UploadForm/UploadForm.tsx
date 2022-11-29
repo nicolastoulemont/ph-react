@@ -1,26 +1,22 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent } from 'react'
 import AddButton from '../AddButton'
 import { useInMemoryStore } from '../../../lib'
 import { uploadImage } from './UploadForm.http'
+import { toast } from 'react-toastify'
 
 export function UploadForm() {
-  const [status, setStatus] = useState<'success' | 'error' | 'idle'>('idle')
-
   const { addImage } = useInMemoryStore()
 
   async function onImageAdd(e: ChangeEvent<HTMLInputElement>) {
-    if (status !== 'idle') {
-      setStatus('idle')
-    }
     if (e.target.files && e.target.files[0]) {
       try {
         const result = await uploadImage(e.target.files[0])
         addImage(result)
-        setStatus('success')
+        toast.success('File added to your folders')
       } catch (error) {
         // Send log to observalibility tool (datadog, sentry)
         console.error(error)
-        setStatus('error')
+        toast.error('Something went wrong')
       }
     } else {
       console.error('No file was picked')

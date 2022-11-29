@@ -9,9 +9,9 @@ export function UploadedList() {
       <button className=' mb-6 px-3 py-2 bg-blue-500 rounded-lg text-white font-medium text-sm' onClick={createFolder}>
         New folder
       </button>
-      <h2 className='text-xl font-semibold'>Uploaded images</h2>
       {state && state?.length > 0 && (
         <>
+          <h2 className='text-xl font-semibold'>Uploaded images</h2>
           {state.map((folder, index) => (
             <div key={folder.name} className='my-3 border-2 border-gray-200 rounded-md p-3'>
               <h3 className='text-sm font-medium'>{folder.name}</h3>
